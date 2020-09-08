@@ -21,11 +21,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* USB Device descriptor parameter */
 #define VENDOR_ID       0xFC51
-#define PRODUCT_ID      0x0058 
+#define PRODUCT_ID      0x0058
 #define DEVICE_VER      0x0100
-#define MANUFACTURER    F_YUUCHI
-#define PRODUCT         Lily58
-#define DESCRIPTION     Lily58 is 6×4+5keys column-staggered split keyboard.
+#define MANUFACTURER    ORVISEVANS
+#define PRODUCT         Lily58GlowEnc
+#define DESCRIPTION     Lily58 is 6×4+5keys column-staggered split keyboard with glowing keys and encoders.
 
 /* key matrix size */
 // Rows are doubled-up
@@ -51,12 +51,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* ws2812 RGB LED */
 /* https://docs.qmk.fm/#/config_options?id=rgb-light-configuration */
 #define RGB_DI_PIN D3
-#undef RGBLED_NUM
-#define RGBLED_NUM 36    // Number of LEDs
-#define RGBLIGHT_ANIMATIONS
-#define RGBLIGHT_LAYERS
-#define RGBLIGHT_SPLIT
-#define RGBLED_SPLIT { 36, 36 }
+// #undef RGBLED_NUM       // in case it's defined elsewhere
+// #define RGBLED_NUM 6    // Number of LEDs in underglow
+#define DRIVER_1_LED_TOTAL 30
+#define DRIVER_2_LED_TOTAL 30
+#define DRIVER_LED_TOTAL (DRIVER_1_LED_TOTAL + DRIVER_2_LED_TOTAL)
+// #define RGBLIGHT_SPLIT
+#define RGBLIGHT_EFFECT_STATIC_GRADIENT
+#define RGBLIGHT_EFFECT_BREATHING
+#define RGBLIGHT_EFFECT_RAINBOW_MOOD
+#define RGBLIGHT_EFFECT_RAINBOW_SWIRL
+#define RGBLIGHT_EFFECT_STATIC_GRADIENT
+#define RGBLIGHT_EFFECT_TWITKLE
+// #define RGBLED_SPLIT { 36, 36 }
 #define RGBLIGHT_LIMIT_VAL 120
 #define RGBLIGHT_HUE_STEP 10
 #define RGBLIGHT_SAT_STEP 17
@@ -69,6 +76,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ENCODERS_PAD_A_RIGHT { D4 }
 #define ENCODERS_PAD_B_RIGHT { F5 }
 #define ENCODER_RESOLUTION 4
+
+/* Power and Audio keys */
+// #define EXTRAKEY_ENABLE
 
 /*
  * Feature disable options
@@ -85,5 +95,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define NO_ACTION_LAYER
 //#define NO_ACTION_TAPPING
 //#define NO_ACTION_ONESHOT
-//#define NO_ACTION_MACRO
-//#define NO_ACTION_FUNCTION
+#define NO_ACTION_MACRO
+#define NO_ACTION_FUNCTION
+

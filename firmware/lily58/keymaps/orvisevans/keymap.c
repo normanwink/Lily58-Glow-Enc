@@ -15,6 +15,12 @@ extern rgblight_config_t rgblight_config;
 
 extern uint8_t is_master;
 
+#define COPY LCTL(KC_C)
+#define CUT LCTL(KC_X)
+#define PSTE LCTL(KC_V)
+#define UNDO LCTL(KC_Z)
+#define REDO LCTL(KC_Y)
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* DVORAK
@@ -27,7 +33,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|   [   |    |    ]  |------+------+------+------+------+------|
  * |LCtrl |   ;  |   Q  |   J  |   K  |   X  |-------|    |-------|   B  |   M  |   W  |   V  |   Z  |  /   |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | LGUI | LAlt |MO[2] | / Enter /       \Space \  | MO[3]|BackSP|Delete|
+ *                   | LGUI | LAlt |MO[2] | / Space /       \Enter \  | MO[3]|BackSP|Delete|
  *                   |      |      |      |/       /         \      \ |      |      |      |
  *                   `----------------------------'           '------''--------------------'
  */
@@ -37,7 +43,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TAB,   KC_QUOT, KC_COMM, KC_DOT, KC_P,    KC_Y,                     KC_F,    KC_G,    KC_C,    KC_R,    KC_L,    KC_EQL, \
   KC_LSFT,  KC_A,   KC_O,    KC_E,    KC_U,    KC_I,                     KC_D,    KC_H,    KC_T,    KC_N,    KC_S,    KC_MINS, \
   KC_LCTRL, KC_SCLN, KC_Q,   KC_J,    KC_K,    KC_X, KC_LBRC,  KC_RBRC,  KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,    KC_SLSH, \
-                             KC_LGUI, KC_LALT,MO(2), KC_ENT,   KC_SPC,   MO(3),   KC_BSPC, KC_DELETE \
+                             KC_LGUI, KC_LALT,MO(2), KC_SPC,   KC_ENT,   MO(3),   KC_BSPC, KC_DELETE \
 ),
 /* QWERTY
  * ,-----------------------------------------.                    ,-----------------------------------------.
@@ -63,36 +69,36 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 /* CODENAV
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |      |  F1  |  F2  |  F3  |  F4  |  F5  |                    |  F6  |  F7  |  F8  |  F9  | F10  | F11  |
+ * | Reset|  F1  |  F2  |  F3  |  F4  |  F5  |                    |  F6  |  F7  |  F8  |  F9  | F10  | F11  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |   `  |      |   &  |   (  |   )  |   +  |                    |      |      | PgUp | PgDwn|      |  F12 |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | Debug|      |   |  |   [  |   ]  |   -  |-------.    ,-------| Home | Left |  Up  | Down | Right|  End |
- * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
- * | Reset|      |   \  |   <  |   >  |   /  |-------|    |-------|      |      |      |      |      |   \  |
+ * |   `  |  Cut |   &  |   (  |   )  |  Cut |                    |      |      | PgUp | PgDwn|      |  F12 |
+ * |------+------+------+------+------+------+                    |------+------+------+------+------+------|
+ * |      | Copy |   |  |   [  |   ]  | Copy |-------.    ,-------| Home | Left |  Up  | Down | Right|  End |
+ * |------+------+------+------+------+------+       |    |       |------+------+------+------+------+------|
+ * |      | Paste|   \  |   <  |   >  | Paste|-------|    |-------|      | Left |  Up  | Down | Right|   \  |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *                   |      |      |      | /       /       \      \  | MO[4]|      |      |
  *                   |      |      |      |/       /         \      \ |      |      |      |
  *                   `----------------------------'           '------''--------------------'
  */
 [2] = LAYOUT( \
-  _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                     KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11, \
-  KC_GRV,  _______, KC_AMPR, KC_LPRN, KC_RPRN, KC_EQL,                    _______, _______, KC_PGUP, KC_PGDN, _______, KC_F12, \
-  DEBUG,   _______, KC_PIPE, KC_LBRC, KC_RBRC, KC_MINS,                   KC_HOME, KC_LEFT, KC_UP,   KC_DOWN, KC_RGHT, KC_END, \
-  RESET,   _______, KC_BSLS, KC_COMM, KC_DOT,  KC_SLSH, _______, _______, _______, _______, _______, _______, _______, KC_BSLS, \
+  RESET,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                     KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11, \
+  KC_GRV,  CUT    , KC_AMPR, KC_LPRN, KC_RPRN, CUT    ,                   _______, _______, KC_PGUP, KC_PGDN, _______, KC_F12, \
+  _______, COPY   , KC_PIPE, KC_LBRC, KC_RBRC, COPY   ,                   KC_HOME, KC_LEFT, KC_UP,   KC_DOWN, KC_RGHT, KC_END, \
+  _______, PSTE   , KC_BSLS, KC_COMM, KC_DOT,  PSTE   , _______, _______, _______, KC_LEFT, KC_UP,   KC_DOWN, KC_RGHT, KC_BSLS, \
                              _______, _______, _______, _______, _______, MO(4),   _______, _______\
 ),
 /* NUMPAD
  * ,-----------------------------------------.                    ,-----------------------------------------.
  * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |   `  |   1  |   2  |   3  |   4  |   5  |                    |   6  |   7  |   8  |   9  |   0  |      |
+ * |      |      |      |      |      |      |                    |   6  |   7  |   8  |   9  |   0  |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |-------.    ,-------|      | Left | Down |  Up  |Right |      |
+ * |      |      |      |      |      |      |-------.    ,-------|      | Left | Down |  Up  |Right |      |
  * |------+------+------+------+------+------|   [   |    |    ]  |------+------+------+------+------+------|
- * |  F7  |  F8  |  F9  | F10  | F11  | F12  |-------|    |-------|   +  |   -  |   =  |   [  |   ]  |   \  |
+ * |      |      |      |      |      |      |-------|    |-------|   +  |   -  |   =  |   [  |   ]  |   \  |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | LAlt | LGUI |LOWER | /Space  /       \Enter \  |RAISE |BackSP| RGUI |
+ *                   |      |      | Adjust| /       /       \      \  |      |  0   |  .   |
  *                   |      |      |      |/       /         \      \ |      |      |      |
  *                   `----------------------------'           '------''--------------------'
  */
@@ -106,35 +112,37 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 /* ADJUST
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |Power |      |      | Debug| Reset|EEPRst|                    |      | BLTog| BLCyc|BLBrth| BLOn |  BL+ |
+ * |Power |      |      | Debug| Reset|EEPRst|                    |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | DF[0]| DF[1]|      |      |      |      |                    |      |      |      |      | BLOff|  BL- |
+ * | DF[0]| DF[1]|      |      |      |      |                    |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | Brt+ | Vol+ |  Cut | Copy | Paste|      |-------.    ,-------|RGBTog| Mode+| FX+  | HUE+ | SAT+ | VAL+ |
+ * | Brt+ | Vol+ |      |      |      |      |-------.    ,-------|RGBTog| Mode+| FX+  | HUE+ | SAT+ | VAL+ |
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
- * | Brt- | Vol- |      | Undo | Again|      |-------|    |-------|      | Mode-| FX-  | HUE- | SAT- | VAL- |
+ * | Brt- | Vol- |      |      |      |      |-------|    |-------|      | Mode-| FX-  | HUE- | SAT- | VAL- |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *                   |      |      |       | /      /       \      \  |      |      |      |
  *                   |      |      |      |/       /         \      \ |      |      |      |
  *                   `----------------------------'           '------''--------------------'
  */
   [4] = LAYOUT( \
-  KC_PWR,  XXXXXXX, XXXXXXX, DEBUG,   RESET,   EEP_RST,                   XXXXXXX, BL_TOGG,  BL_STEP, BL_BRTG, BL_ON,   BL_INC, \
-  DF(0),   DF(1),   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX,  XXXXXXX, XXXXXXX, BL_OFF,  BL_DEC, \
-  KC_BRIU, KC_VOLU, KC_CUT,  KC_COPY, KC_PSTE, XXXXXXX,                   RGB_TOG, RGB_MOD,  RGB_SPI, RGB_HUI, RGB_SAI, RGB_VAI, \
-  KC_BRID, KC_VOLD, XXXXXXX, KC_UNDO, KC_AGIN, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, RGB_RMOD, RGB_SPD, RGB_HUD, RGB_SAD, RGB_VAD,\
+  KC_PWR,  XXXXXXX, XXXXXXX, DEBUG,   RESET,   EEP_RST,                   RGB_MODE_PLAIN, RGB_MODE_BREATHE,  RGB_MODE_RAINBOW, RGB_MODE_SWIRL, RGB_MODE_SNAKE, XXXXXXX, \
+  DF(0),   DF(1),   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   RGB_MODE_KNIGHT, RGB_MODE_XMAS,  RGB_MODE_GRADIENT, RGB_MODE_RGBTEST, XXXXXXX, XXXXXXX, \
+  KC_BRIU, KC_VOLU, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   RGB_TOG, RGB_MOD,  RGB_SPI, RGB_HUI, RGB_SAI, RGB_VAI, \
+  KC_BRID, KC_VOLD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, RGB_RMOD, RGB_SPD, RGB_HUD, RGB_SAD, RGB_VAD,\
                              _______, _______, _______, _______, _______, _______, _______,  _______ \
   )
 };
 
+
 // Encoders
+// https://docs.splitkb.com/hc/en-us/articles/360010513760-How-can-I-use-a-rotary-encoder-
 
 void encoder_update_user(uint8_t index, bool clockwise) {
     if (index == 0) { /* First encoder */
         if (clockwise) {
-            tap_code(KC_VOLU);
+            tap_code16(UNDO);
         } else {
-            tap_code(KC_VOLD);
+            tap_code16(REDO);
         }
     } else if (index == 1) { /* Second encoder */
         if (clockwise) {
