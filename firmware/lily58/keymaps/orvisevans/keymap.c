@@ -24,16 +24,12 @@ extern rgblight_config_t rgblight_config;
 
 extern uint8_t is_master;
 
-#define COPY LCTL(KC_C)
-#define CUT LCTL(KC_X)
-#define PSTE LCTL(KC_V)
-#define UNDO LCTL(KC_Z)
-#define REDO LCTL(KC_Y)
-
 enum my_keycodes {
   CYC_LAYR = SAFE_RANGE,
-  FOO,
-  BAR
+  OS_TOGG,
+  COPY,
+  CUT,
+  PSTE
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -89,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |      |      | PgUp | PgDwn|PrtScr|  Cut |                    |      |      | PgUp | PgDwn|      |  F12 |
  * |------+------+------+------+------+------+                    |------+------+------+------+------+------|
  * |      |      |   |  |   [  |   ]  | Copy |-------.    ,-------| Home | Left |  Up  | Down | Right|  End |
- * |------+------+------+------+------+------+       |    |       |------+------+------+------+------+------|
+ * |------+------+------+------+------+------+OS_TOGG|    |       |------+------+------+------+------+------|
  * |      | Left |  Up  | Down | Right| Paste|-------|    |-------|      | Left |  Up  | Down | Right|   \  |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *                   |      |      |      | /       /       \      \  | MO[4]|      |      |
@@ -100,7 +96,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   RESET,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                     KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11, \
   _______, _______, KC_PGUP, KC_PGDN, KC_PSCR, CUT    ,                   _______, _______, KC_PGUP, KC_PGDN, _______, KC_F12, \
   _______, _______, KC_PIPE, KC_LBRC, KC_RBRC, COPY   ,                   KC_HOME, KC_LEFT, KC_UP,   KC_DOWN, KC_RGHT, KC_END, \
-  _______, KC_LEFT, KC_UP,   KC_DOWN, KC_RGHT, PSTE   , _______, _______, _______, KC_LEFT, KC_UP,   KC_DOWN, KC_RGHT, KC_BSLS, \
+  _______, KC_LEFT, KC_UP,   KC_DOWN, KC_RGHT, PSTE   , OS_TOGG, _______, _______, KC_LEFT, KC_UP,   KC_DOWN, KC_RGHT, KC_BSLS, \
                              _______, _______, _______, _______, _______, MO(4),   _______, _______\
 ),
 /* NUMPAD
@@ -119,10 +115,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 
 [3] = LAYOUT( \
-  _______, _______, _______, _______, _______, _______,                     KC_NLCK, KC_PSLS, KC_PAST, KC_PMNS, _______, KC_SLEP, \
-  _______, _______, _______, _______, _______, _______,                     KC_PSCR, KC_P7,   KC_P8,   KC_P9,   KC_PPLS, _______, \
+  _______, _______, _______, _______, _______, _______,                     KC_NLCK, KC_PSLS, KC_PAST, KC_PMNS, XXXXXXX, KC_SLEP, \
+  _______, _______, _______, _______, _______, _______,                     KC_PSCR, KC_P7,   KC_P8,   KC_P9,   KC_PPLS, XXXXXXX, \
   _______, _______, _______, _______, _______, _______,                     KC_DEL,  KC_P4,   KC_P5,   KC_P6,   KC_PCMM, KC_CALC, \
-  _______, _______, _______, _______, _______, _______,  _______, _______,  KC_BSPC, KC_P1,   KC_P2,   KC_P3,   KC_PEQL, _______, \
+  _______, _______, _______, _______, _______, _______,  _______, _______,  KC_BSPC, KC_P1,   KC_P2,   KC_P3,   KC_PEQL, XXXXXXX, \
                              _______, _______, MO(4),    _______, _______,  _______, KC_P0,   KC_PDOT \
 ),
 /* ADJUST
@@ -141,7 +137,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
   [4] = LAYOUT( \
   KC_PWR,  XXXXXXX, XXXXXXX, DEBUG,   RESET,   EEP_RST,                   RGB_MODE_PLAIN, RGB_MODE_BREATHE,  RGB_MODE_RAINBOW, RGB_MODE_SWIRL, RGB_MODE_SNAKE, XXXXXXX, \
-  DF(0),   DF(1),   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   RGB_MODE_KNIGHT, RGB_MODE_XMAS,  RGB_MODE_GRADIENT, RGB_MODE_RGBTEST, XXXXXXX, XXXXXXX, \
+  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   RGB_MODE_KNIGHT, RGB_MODE_XMAS,  RGB_MODE_GRADIENT, RGB_MODE_RGBTEST, XXXXXXX, XXXXXXX, \
   KC_BRIU, KC_VOLU, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   RGB_TOG, RGB_MOD,  RGB_SPI, RGB_HUI, RGB_SAI, RGB_VAI, \
   KC_BRID, KC_VOLD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, RGB_RMOD, RGB_SPD, RGB_HUD, RGB_SAD, RGB_VAD,\
                              _______, _______, _______, _______, _______, _______, _______,  _______ \
@@ -149,30 +145,83 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 
-// Encoders
-// https://docs.splitkb.com/hc/en-us/articles/360010513760-How-can-I-use-a-rotary-encoder-
+// Last initialization step
+void keyboard_post_init_user(void) {
+    user_config.raw = eeconfig_read_user();
+}
 
-void encoder_update_user(uint8_t index, bool clockwise) {
-    if (index == 0) { /* First encoder */
-        if (clockwise) {
-            tap_code16(UNDO);
-        } else {
-            tap_code16(REDO);
-        }
-    } else if (index == 1) { /* Second encoder */
-        if (clockwise) {
-            tap_code(KC_VOLU);
-        } else {
-            tap_code(KC_VOLD);
-        }
-    }
+// eeprom reset step
+void eeconfig_init_user(void) { // EEPROM is getting reset!
+  user_config.raw=0;
+  user_config.os_is_windows = true;
+  eeconfig_update_user(user_config.raw);
 }
 
 
+// Macros
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  // if the key is pressed down
+  if (record->event.pressed) { 
+    switch (keycode) {
+      case OS_TOGG:
+        user_config.os_is_windows ^= 1;
+        eeconfig_update_user(user_config.raw);
+        break;
+      case COPY:
+        if (user_config.os_is_windows) {
+          SEND_STRING(SS_LCTL("c"));
+        } else {
+          SEND_STRING(SS_LGUI("c"));
+        }
+        break;
+      case CUT:
+        if (user_config.os_is_windows) {
+          SEND_STRING(SS_LCTL("x"));
+        } else {
+          SEND_STRING(SS_LGUI("x"));
+        }
+        break;
+      case PSTE:
+        if (user_config.os_is_windows) {
+          SEND_STRING(SS_LCTL("v"));
+        } else {
+          SEND_STRING(SS_LGUI("v"));
+        }
+        break;
+    }
+  }
+  return true;
+}
+
+
+// Encoders
+// https://docs.splitkb.com/hc/en-us/articles/360010513760-How-can-I-use-a-rotary-encoder-
+void encoder_update_user(uint8_t index, bool clockwise) {
+  if (index == 0) { /* First encoder */
+    if (clockwise) {
+      if (user_config.os_is_windows) {
+        SEND_STRING(SS_LCTL("z"));
+      } else {
+        SEND_STRING(SS_LGUI("z"));
+      }
+    } else {
+      if (user_config.os_is_windows) {
+        SEND_STRING(SS_LCTL("y"));
+      } else {
+        SEND_STRING(SS_LGUI(SS_LSFT("z")));
+      }
+    }
+  } else if (index == 1) { /* Second encoder */
+    if (clockwise) {
+      tap_code(KC_VOLU);
+    } else {
+      tap_code(KC_VOLD);
+    }
+  }
+}
+
 // Lighting Layers
 /* https://docs.qmk.fm/#/feature_rgblight?id=lighting-layers */
-
-
 int RGB_current_mode;
 
 // Setting ADJUST layer RGB back to default
@@ -188,58 +237,4 @@ void matrix_init_user(void) {
     #ifdef RGBLIGHT_ENABLE
       RGB_current_mode = rgblight_config.mode;
     #endif
-}
-
-//SSD1306 OLED update loop, make sure to enable OLED_DRIVER_ENABLE=yes in rules.mk
-#ifdef OLED_DRIVER_ENABLE
-
-oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-  if (!is_keyboard_master())
-    return OLED_ROTATION_180;  // flips the display 180 degrees if offhand
-  return rotation;
-}
-
-// When you add source files to SRC in rules.mk, you can use functions.
-const char *read_layer_state(void);
-const char *read_logo(void);
-void set_keylog(uint16_t keycode, keyrecord_t *record);
-const char *read_keylog(void);
-const char *read_keylogs(void);
-
-// const char *read_mode_icon(bool swap);
-// const char *read_host_led_state(void);
-// void set_timelog(void);
-// const char *read_timelog(void);
-
-void oled_task_user(void) {
-  if (is_keyboard_master()) {
-    // If you want to change the display of OLED, you need to change here
-    oled_write_ln(read_layer_state(), false);
-    oled_write_ln(read_keylog(), false);
-    oled_write_ln(read_keylogs(), false);
-    //oled_write_ln(read_mode_icon(keymap_config.swap_lalt_lgui), false);
-    //oled_write_ln(read_host_led_state(), false);
-    //oled_write_ln(read_timelog(), false);
-  } else {
-    oled_write(read_logo(), false);
-  }
-}
-#endif // OLED_DRIVER_ENABLE
-
-void cycle_default_layer(void) {
-  // TODO: How do I get the current default layer?
-}
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  if (record->event.pressed) {
-#ifdef OLED_DRIVER_ENABLE
-    set_keylog(keycode, record);
-#endif
-  }
-  switch (keycode) {
-    case CYC_LAYR:
-      cycle_default_layer();
-    default:
-      return true;
-  }
 }
