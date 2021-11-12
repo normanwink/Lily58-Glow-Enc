@@ -1,6 +1,6 @@
 ## To Build With Docker
 
-First install docker desktop. Follow directions [here](https://docs.docker.com/docker-for-windows/install/) for windows.
+First install docker desktop. Follow directions [here](https://docs.docker.com/docker-for-windows/install/) for windows (or look around there for your os)
 
 powershell command (in windows):
 
@@ -10,6 +10,16 @@ docker build -t qmk-builder .
 docker run --rm -it `
     --mount type=bind,source="${PWD}/build",target="/qmk_firmware/.build" `
     --mount type=bind,source="${PWD}/lily58",target="/qmk_firmware/keyboards/lily58" `
+    qmk-builder make lily58/glowEnc:orvisevans
+```
+
+bash command (linux / osx):
+
+```bash
+docker build -t qmk-builder . && \
+docker run --rm -it \
+    --mount type=bind,source="${PWD}/build",target="/qmk_firmware/.build" \
+    --mount type=bind,source="${PWD}/lily58",target="/qmk_firmware/keyboards/lily58" \
     qmk-builder make lily58/glowEnc:orvisevans
 ```
 

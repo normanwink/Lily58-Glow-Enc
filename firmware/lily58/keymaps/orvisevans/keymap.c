@@ -26,7 +26,7 @@ extern uint8_t is_master;
 
 enum my_keycodes {
   CYC_LAYR = SAFE_RANGE,
-  OS_TOGG,
+  OS_TOGL,
   COPY,
   CUT,
   PSTE
@@ -85,7 +85,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |      |      | PgUp | PgDwn|PrtScr|  Cut |                    |      |      | PgUp | PgDwn|      |  F12 |
  * |------+------+------+------+------+------+                    |------+------+------+------+------+------|
  * |      |      |   |  |   [  |   ]  | Copy |-------.    ,-------| Home | Left |  Up  | Down | Right|  End |
- * |------+------+------+------+------+------+OS_TOGG|    |       |------+------+------+------+------+------|
+ * |------+------+------+------+------+------+OS_TOGL|    |       |------+------+------+------+------+------|
  * |      | Left |  Up  | Down | Right| Paste|-------|    |-------|      | Left |  Up  | Down | Right|   \  |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *                   |      |      |      | /       /       \      \  | MO[4]|      |      |
@@ -96,7 +96,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   RESET,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                     KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11, \
   _______, _______, KC_PGUP, KC_PGDN, KC_PSCR, CUT    ,                   _______, _______, KC_PGUP, KC_PGDN, _______, KC_F12, \
   _______, _______, KC_PIPE, KC_LBRC, KC_RBRC, COPY   ,                   KC_HOME, KC_LEFT, KC_UP,   KC_DOWN, KC_RGHT, KC_END, \
-  _______, KC_LEFT, KC_UP,   KC_DOWN, KC_RGHT, PSTE   , OS_TOGG, _______, _______, KC_LEFT, KC_UP,   KC_DOWN, KC_RGHT, KC_BSLS, \
+  _______, KC_LEFT, KC_UP,   KC_DOWN, KC_RGHT, PSTE   , OS_TOGL, _______, _______, KC_LEFT, KC_UP,   KC_DOWN, KC_RGHT, KC_BSLS, \
                              _______, _______, _______, _______, _______, MO(4),   _______, _______\
 ),
 /* NUMPAD
@@ -163,7 +163,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   // if the key is pressed down
   if (record->event.pressed) { 
     switch (keycode) {
-      case OS_TOGG:
+      case OS_TOGL:
         user_config.os_is_windows ^= 1;
         eeconfig_update_user(user_config.raw);
         break;
@@ -196,7 +196,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 // Encoders
 // https://docs.splitkb.com/hc/en-us/articles/360010513760-How-can-I-use-a-rotary-encoder-
-void encoder_update_user(uint8_t index, bool clockwise) {
+bool encoder_update_user(uint8_t index, bool clockwise) {
   if (index == 0) { /* First encoder */
     if (clockwise) {
       if (user_config.os_is_windows) {
@@ -218,6 +218,7 @@ void encoder_update_user(uint8_t index, bool clockwise) {
       tap_code(KC_VOLD);
     }
   }
+  return false;
 }
 
 // Lighting Layers
