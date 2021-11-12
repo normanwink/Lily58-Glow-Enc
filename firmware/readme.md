@@ -1,3 +1,5 @@
+Rather than including the entire qmk firmware here, this is my workaround to only have to include the relevant files. The downside of this is that the base lily58 code here doesn't stay updated along with the qmk repo.
+
 ## To Build With Docker
 
 First install docker desktop. Follow directions [here](https://docs.docker.com/docker-for-windows/install/) for windows (or look around there for your os)
