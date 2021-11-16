@@ -26,6 +26,7 @@ I got this board manufactured by JLCPCB. Just upload the file called gerber.zip 
 | Pro Micro | 2 | [Aliexpress](https://www.aliexpress.com/item/32888212119.html) |
 | Micro USB Cable | 2 | -- |
 | OLED module (optional) | 2 | [Aliexpress](https://www.aliexpress.com/item/32861875681.html) |
+| Reset push buttons (optional) | 2 | [Aliexpress](https://www.aliexpress.com/item/1005002490728099.html) |
 | Rotary Encoder EC11 | 2 | [Aliexpress](https://www.aliexpress.com/item/32322425597.html)|
 | Knob | 2 | -- |
 | Key switch (MX) | 58 | [Aliexpress](https://www.aliexpress.com/item/32973993662.html) |
